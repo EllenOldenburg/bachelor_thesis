@@ -320,14 +320,14 @@ lines = plt.plot(t, results)
 plt.legend(lines[:14], names, prop = {'size': 12}, loc = 'upper right', frameon=True, ncol=2)
 plt.show()
 
-'''
+
 x = [10.01, 9.01, 8.01, 7.01, 6.01, 5.01, 4.01, 3.01, 2.01, 1.01, 11.01, 12.01, 13.01, 14.01]
 y = [[4.38, 4.38, 4.38],426.87, [4.15, 4.15], 930, 948.93]
 
 
-plt.boxplot(x,y)
+plt.boxplot(x,INPUT_VALUES)
 plt.show()
 
-'''
+
 
 
