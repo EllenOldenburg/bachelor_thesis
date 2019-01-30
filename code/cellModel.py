@@ -34,35 +34,35 @@ Constants
 
 """
 
-PAR = { 's': 10 ** 4,  # externer Nährstoff
-        'dm': 0.1,  # mRNA-Abbaurate
-        'ns': 0.5,  # Nährstoffeffizienz
-        'nr': 7459,  # Ribosomenlänge
-        'nx': 300,  # Länge nicht-ribosomaler Proteine
-        'ymax': 1260,  # max. übersetzen Dehnungsrate
-        'Ky': 7,  # Übersetzung Verlängerungsschwelle
-        'vt': 726,  # max. Nährstoffimportrate
-        'Kt': 1000,  # Nährstoffimportschwelle
-        'vm': 5800,  # max. enzymatische Rate
-        'Km': 1000,  # enzymatic threshold
-        'wr': 930,  # max. Ribosomen-Transkriptionsrate
-        'we': 4.14,  # max. Enzymtranskriptionsrate   we = wt = wm
-        'wq': 948.93,  # max. q-Transkriptionsrate
-        'thetar': 426.87,  # Ribosomentranskriptionsschwelle
-        'thetanr': 4.38,  # Nicht-ribosomale Transkriptionsschwelle
-        'Kq': 152219,  # q-Autoinhibitionsschwelle
-        'hq': 4,  # q-Autoinhibition Hill-Koeffizient
-        'kb': 1,  # mRNA-Ribosomen-Bindungsrate
-        'ku': 1,  # mRNA-Ribosomen-Nichtbindungsrate
-        'M': 10 ** 8,  # total cell mass
-        'kcm': 0.00599,  # Chloramphenicol-Bindungsrate
-        'thetax': [1, 1, 1, 1],  #transkriptionswelle #transcriptional energy-thresholds
-        'wx': [1, 1, 1, 1]  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
-}
+# PAR = { 's': 10 ** 4,  # externer Nährstoff
+#         'dm': 0.1,  # mRNA-Abbaurate
+#         'ns': 0.5,  # Nährstoffeffizienz
+#         'nr': 7459,  # Ribosomenlänge
+#         'nx': 300,  # Länge nicht-ribosomaler Proteine
+#         'ymax': 1260,  # max. übersetzen Dehnungsrate
+#         'Ky': 7,  # Übersetzung Verlängerungsschwelle
+#         'vt': 726,  # max. Nährstoffimportrate
+#         'Kt': 1000,  # Nährstoffimportschwelle
+#         'vm': 5800,  # max. enzymatische Rate
+#         'Km': 1000,  # enzymatic threshold
+#         'wr': 930,  # max. Ribosomen-Transkriptionsrate
+#         'we': 4.14,  # max. Enzymtranskriptionsrate   we = wt = wm
+#         'wq': 948.93,  # max. q-Transkriptionsrate
+#         'thetar': 426.87,  # Ribosomentranskriptionsschwelle
+#         'thetanr': 4.38,  # Nicht-ribosomale Transkriptionsschwelle
+#         'Kq': 152219,  # q-Autoinhibitionsschwelle
+#         'hq': 4,  # q-Autoinhibition Hill-Koeffizient
+#         'kb': 1,  # mRNA-Ribosomen-Bindungsrate
+#         'ku': 1,  # mRNA-Ribosomen-Nichtbindungsrate
+#         'M': 10 ** 8,  # total cell mass
+#         'kcm': 0.00599,  # Chloramphenicol-Bindungsrate
+#         'thetax': [1, 1, 1, 1],  #transkriptionswelle #transcriptional energy-thresholds
+#         'wx': [1, 1, 1, 1]  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
+# }
 
-"""
 
-PAR = {'s': 1000000000,  # externer Nährstoff
+
+PAR = {'s': 1,  # externer Nährstoff
        'dm': 1,  # mRNA-Abbaurate
        'ns': 1,  # Nährstoffeffizienz
        'nr': 1,  # Ribosomenlänge
@@ -84,14 +84,17 @@ PAR = {'s': 1000000000,  # externer Nährstoff
        'ku': 1,  # mRNA-Ribosomen-Nichtbindungsrate
        'M': 1,  # total cell mass
        'kcm': 1,  # Chloramphenicol-Bindungsrate
-       'thetax': [1, 1, 1, 1],  #transkriptionswelle #transcriptional energy-thresholds
-       'wx': [1, 1, 1, 1],  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
+       'thetax': [1, 1, 1],  #transkriptionswelle #transcriptional energy-thresholds
+       'wx': [1, 1, 1],  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
 }
 
-"""
+
 
 #               si,    a,    r,    et,   em,  q,     mt,   mm,   mr,   mq,   ct,   cm,   cr,   cq,
-INPUT_VALUES = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+#INPUT_VALUES = [31096.192, 43297.502, 0.0414, 471.364, 471.364, 471.364, 49.333, 49.333, 8514.558, 8811.960, 0, 0, 0, 0] #ribosome-bound mRNA sequestered by chloramphenicol
+INPUT_VALUES = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+#INPUT_VALUES = [31096.192, 43297.502, 0.0414, 471.364, 471.364, 471.364, 49.333, 49.333, 8514.558, 8811.960, 0, 357.898, 348.675, 0] # ribosome-bound mRNA
+
 
 
 """
@@ -117,7 +120,8 @@ def vx(a, cx, par, nx):
 def vr(a, par, nx, cr):
     return (gamma(a, par) / nx) * cr
 
-
+def vq(a, cq, par, nx):
+    return (gamma(a, par) / nx) * cq
 
 # γ ist die Geschwindigkeit der Translationsdehnung mit maximaler Rate γ max = k 2 und Schwelle K γ = k 2 / K p für halbmaximale Dehnung.
 def gamma(a, par):
@@ -128,15 +132,25 @@ def gamma(a, par):
 # 4x
 def omegax(a, wx, thetaX):
     omegaResult = []
-    for i in range(0, 4):
-        omegaResult.append((wx[i] * a) / (thetaX[i] + a))
+    for i in range(0, 3):
+        # omegaResult.append((wx[i] * a) / (thetaX[i] + a))
+        omegaResult.append(wx[i] *(a / (thetaX[i] + a)))
+
     return omegaResult
 
+
+def I (q, par):
+    return 1/(1+(q/par['Kq'])**par['hq'])
+
+
+def omegaq(wq, a, par, q):
+    return wq * (a / (par['thetanr'] + a)) * I(q, par)
 
 # Die Wachstumsrate λ ist entscheidend, um die zellulären Prozesse mit Wachstum zu verbinden, da alle intrazellulären Spezies durch Umverteilung des Zellinhalts zwischen Mutter- und Tochterzellen verdünnt werden
 def lamda(a, par, cValues):
     return (gamma(a, par) / par['M']) * sum(cValues)
-    
+
+
 #die Gesamtmasse der Zelle als Gesamtproteinmasse (einschließlich gebundener Ribosomen)   
 #def M(par):                                                                                
    # return(sum(par['nx']*x)+pa['nr']*sum(cx))
@@ -183,6 +197,9 @@ def dr_dt(a, cx, mx, r, par, lamdaResult, nx, cr):
 # 4x
 def dmx_dt(a, cx, mx, r, par, lamdaResult, wx, thetaX, nx, omegaResult):
     return omegaResult - (lamdaResult + par['dm']) * mx + vx(a, cx, par, nx) - par['kb'] * r * mx + par['ku'] * cx
+
+def dmq_dt(a, cx, mq, r, par, lamdaResult, wq, nx, q, cq):
+    return omegaq(wq, a, par, q) - (lamdaResult + par['dm']) * mq + vq(a, cq, par, nx) - par['kb'] * r * mq + par['ku'] * cq
 
 
 # Mit cx wird der Komplex zwischen einem Ribosom bezeichnet und die mRNA für Protein x
@@ -235,6 +252,8 @@ def changeValues(time, i, par):
     cq = i[13]
     cx = [ct, cm, cr, cq]
     nx = par['nx']
+    wq = par['wq']
+
 
     omegaResult = omegax(a, par["wx"], par["thetax"])
 
@@ -248,7 +267,7 @@ def changeValues(time, i, par):
     dmtResult = dmx_dt(a, ct, mt, r, par, lamdaResult, par['wx'][0], par['thetax'][0], nx, omegaResult[0])
     dmmResult = dmx_dt(a, cm, mm, r, par, lamdaResult, par['wx'][1], par['thetax'][1], nx, omegaResult[1])
     dmrResult = dmx_dt(a, cr, mr, r, par, lamdaResult, par['wx'][2], par['thetax'][2], nx, omegaResult[2])
-    dmqResult = dmx_dt(a, cq, mq, r, par, lamdaResult, par['wx'][3], par['thetax'][3], nx, omegaResult[3])
+    dmqResult = dmq_dt(a, cx, mq, r, par, lamdaResult, wq, nx, q, cq)
     dctResult = dcxt_dt(a, ct, mt, r,  par, lamdaResult, nx)
     dcmResult = dcxt_dt(a, cm, mm, r,  par, lamdaResult, nx)
     dcrResult = dcxt_dt(a, cr, mr, r,  par, lamdaResult, nx)
