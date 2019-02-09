@@ -34,59 +34,59 @@ Constants
 
 """
 
-# PAR = { 's': 10 ** 4,  # externer Nährstoff
-#         'dm': 0.1,  # mRNA-Abbaurate
-#         'ns': 0.5,  # Nährstoffeffizienz
-#         'nr': 7459,  # Ribosomenlänge
-#         'nx': 300,  # Länge nicht-ribosomaler Proteine
-#         'ymax': 1260,  # max. übersetzen Dehnungsrate
-#         'Ky': 7,  # Übersetzung Verlängerungsschwelle
-#         'vt': 726,  # max. Nährstoffimportrate
-#         'Kt': 1000,  # Nährstoffimportschwelle
-#         'vm': 5800,  # max. enzymatische Rate
-#         'Km': 1000,  # enzymatic threshold
-#         'wr': 930,  # max. Ribosomen-Transkriptionsrate
-#         'we': 4.14,  # max. Enzymtranskriptionsrate   we = wt = wm
-#         'wq': 948.93,  # max. q-Transkriptionsrate
-#         'thetar': 426.87,  # Ribosomentranskriptionsschwelle
-#         'thetanr': 4.38,  # Nicht-ribosomale Transkriptionsschwelle
-#         'Kq': 152219,  # q-Autoinhibitionsschwelle
-#         'hq': 4,  # q-Autoinhibition Hill-Koeffizient
-#         'kb': 1,  # mRNA-Ribosomen-Bindungsrate
-#         'ku': 1,  # mRNA-Ribosomen-Nichtbindungsrate
-#         'M': 10 ** 8,  # total cell mass
-#         'kcm': 0.00599,  # Chloramphenicol-Bindungsrate
-#         'thetax': [4.38, 4.38, 426.87],# 4.38],  #transkriptionswelle #transcriptional energy-thresholds
-#         'wx': [4.15, 4.15, 930]#, 948.93]  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
-# }
-
-
-
-PAR = {'s': 1,  # externer Nährstoff
-       'dm': 1,  # mRNA-Abbaurate
-       'ns': 1,  # Nährstoffeffizienz
-       'nr': 1,  # Ribosomenlänge
-       'nx': 1,  # Länge nicht-ribosomaler Proteine
-       'ymax': 1,  # max. übersetzen Dehnungsrate
-       'Ky': 1,  # Übersetzung Verlängerungsschwelle
-       'vt': 1,  # max. Nährstoffimportrate
-       'Kt': 1,  # Nährstoffimportschwelle
-       'vm': 1,  # max. enzymatische Rate
-       'Km': 1,  # enzymatic threshold
-       'wr': 1,  # max. Ribosomen-Transkriptionsrate
-       'we': 1,  # max. Enzymtranskriptionsrate   we = wt = wm
-       'wq': 1,  # max. q-Transkriptionsrate
-       'thetar': 1,  # Ribosomentranskriptionsschwelle
-       'thetanr': 1,  # Nicht-ribosomale Transkriptionsschwelle
-       'Kq': 1,  # q-Autoinhibitionsschwelle
-       'hq': 1,  # q-Autoinhibition Hill-Koeffizient
-       'kb': 1,  # mRNA-Ribosomen-Bindungsrate
-       'ku': 1,  # mRNA-Ribosomen-Nichtbindungsrate
-       'M': 1,  # total cell mass
-       'kcm': 1,  # Chloramphenicol-Bindungsrate
-       'thetax': [1, 1, 1],  #transkriptionswelle #transcriptional energy-thresholds
-       'wx': [1, 1, 1],  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
+PAR = { 's': 10 ** 4,  # externer Nährstoff
+        'dm': 0.1,  # mRNA-Abbaurate
+        'ns': 0.5,  # Nährstoffeffizienz
+        'nr': 7459,  # Ribosomenlänge
+        'nx': 300,  # Länge nicht-ribosomaler Proteine
+        'ymax': 1260,  # max. übersetzen Dehnungsrate
+        'Ky': 7,  # Übersetzung Verlängerungsschwelle
+        'vt': 726,  # max. Nährstoffimportrate
+        'Kt': 1000,  # Nährstoffimportschwelle
+        'vm': 5800,  # max. enzymatische Rate
+        'Km': 1000,  # enzymatic threshold
+        'wr': 930,  # max. Ribosomen-Transkriptionsrate
+        'we': 4.14,  # max. Enzymtranskriptionsrate   we = wt = wm
+        'wq': 948.93,  # max. q-Transkriptionsrate
+        'thetar': 426.87,  # Ribosomentranskriptionsschwelle
+        'thetanr': 4.38,  # Nicht-ribosomale Transkriptionsschwelle
+        'Kq': 152219,  # q-Autoinhibitionsschwelle
+        'hq': 4,  # q-Autoinhibition Hill-Koeffizient
+        'kb': 1,  # mRNA-Ribosomen-Bindungsrate
+        'ku': 1,  # mRNA-Ribosomen-Nichtbindungsrate
+        'M': 10 ** 8,  # total cell mass
+        'kcm': 0.00599,  # Chloramphenicol-Bindungsrate
+        'thetax': [4.38, 4.38, 426.87],# 4.38],  #transkriptionswelle #transcriptional energy-thresholds
+        'wx': [4.15, 4.15, 930]#, 948.93]  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
 }
+
+
+
+# PAR = {'s': 1,  # externer Nährstoff
+#        'dm': 1,  # mRNA-Abbaurate
+#        'ns': 1,  # Nährstoffeffizienz
+#        'nr': 1,  # Ribosomenlänge
+#        'nx': 1,  # Länge nicht-ribosomaler Proteine
+#        'ymax': 1,  # max. übersetzen Dehnungsrate
+#        'Ky': 1,  # Übersetzung Verlängerungsschwelle
+#        'vt': 1,  # max. Nährstoffimportrate
+#        'Kt': 1,  # Nährstoffimportschwelle
+#        'vm': 1,  # max. enzymatische Rate
+#        'Km': 1,  # enzymatic threshold
+#        'wr': 1,  # max. Ribosomen-Transkriptionsrate
+#        'we': 1,  # max. Enzymtranskriptionsrate   we = wt = wm
+#        'wq': 1,  # max. q-Transkriptionsrate
+#        'thetar': 1,  # Ribosomentranskriptionsschwelle
+#        'thetanr': 1,  # Nicht-ribosomale Transkriptionsschwelle
+#        'Kq': 1,  # q-Autoinhibitionsschwelle
+#        'hq': 1,  # q-Autoinhibition Hill-Koeffizient
+#        'kb': 1,  # mRNA-Ribosomen-Bindungsrate
+#        'ku': 1,  # mRNA-Ribosomen-Nichtbindungsrate
+#        'M': 1,  # total cell mass
+#        'kcm': 1,  # Chloramphenicol-Bindungsrate
+#        'thetax': [1, 1, 1],  #transkriptionswelle #transcriptional energy-thresholds
+#        'wx': [1, 1, 1],  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
+# }
 
 
 
@@ -115,13 +115,13 @@ def vcat(em, si, par):
 # leitet die nettorate der Translation eines Proteins x ab
 # 4x
 def vx(a, cx, par, nx):
-    return (gamma(a, par) / nx) * cx
+    return cx * (gamma(a, par) / nx)
 
 def vr(a, par, nx, cr):
-    return (gamma(a, par) / nx) * cr
+    return cr * (gamma(a, par) / nx)
 
 def vq(a, cq, par, nx):
-    return (gamma(a, par) / nx) * cq
+    return cq * (gamma(a, par) / nx)
 
 # γ ist die Geschwindigkeit der Translationsdehnung mit maximaler Rate γ max = k 2 und Schwelle K γ = k 2 / K p für halbmaximale Dehnung.
 def gamma(a, par):
@@ -140,7 +140,7 @@ def omegax(a, wx, thetaX):
 
 
 def I (q, par):
-    return 1/(1+(q/par['Kq'])**par['hq'])
+    return 1/(1+((q/par['Kq'])**par['hq']))
 
 
 def omegaq(wq, a, par, q):
@@ -180,8 +180,8 @@ def dsi_dt(si, par, et, em, lamdaResult):
 def da_dt(a, em, cx, si, nx, par, lamdaResult):
     sum_all_protein_in_cell = []
     for i in range(0, 4):
-        sum_all_protein_in_cell.append(nx * vx(a, cx, par, nx))
-    return par['ns'] * vcat(em, si, par) - sum(sum_all_protein_in_cell) - lamdaResult * a
+        sum_all_protein_in_cell.append(nx * vx(a, cx[i], par, nx))
+    return par['ns'] * vcat(em, si, par) - sum(sum_all_protein_in_cell) - (lamdaResult * a)
 
 
 # Gleichung für freie Ribosomen  für vr und cr
@@ -189,7 +189,7 @@ def da_dt(a, em, cx, si, nx, par, lamdaResult):
 def dr_dt(a, cx, mx, r, par, lamdaResult, nx, cr):
     sum_proteins_ribosomes = []
     for i in range(0, 4):
-        sum_proteins_ribosomes.append(vx(a, cx, par, nx) - par['kb'] * r * mx + par['ku'] * cx)
+        sum_proteins_ribosomes.append(vx(a, cx[i], par, nx) - par['kb'] * r * mx + par['ku'] * cx[i])
     return vr(a, par, nx, cr) - lamdaResult * r + sum(sum_proteins_ribosomes)
 
 
@@ -262,8 +262,8 @@ def changeValues(time, i, par):
     demResult = det_dt(a, cm, em, par, cx, nx)
     dqResult = det_dt(a, cq, q, par, cx, nx)
     dsiResult = dsi_dt(si, par, et, em, lamdaResult)
-    daResult = da_dt(a, em, ct, si, nx, par, lamdaResult)
-    drResult = dr_dt(a, ct, mt, r, par, lamdaResult, nx, cr)
+    daResult = da_dt(a, em, cx, si, nx, par, lamdaResult)
+    drResult = dr_dt(a, cx, mt, r, par, lamdaResult, nx, cr)
     dmtResult = dmx_dt(a, ct, mt, r, par, lamdaResult, par['wx'][0], par['thetax'][0], nx, omegaResult[0])
     dmmResult = dmx_dt(a, cm, mm, r, par, lamdaResult, par['wx'][1], par['thetax'][1], nx, omegaResult[1])
     dmrResult = dmx_dt(a, cr, mr, r, par, lamdaResult, par['wx'][2], par['thetax'][2], nx, omegaResult[2])
@@ -309,6 +309,8 @@ plot
 """
 
 results = timeCourse(t, INPUT_VALUES)
+result_r = timeCourse(t, INPUT_VALUES_r)
+result_w = timeCourse(t, INPUT_VALUES_w)
 names = ['si', 'a', 'r', 'et', 'em', 'q', 'mt', 'mm', 'mr', 'mq', 'ct', 'cm', 'cr', 'cq']
 
 plt.title('Cell model with parameters from the paper', size = 20)
@@ -316,11 +318,32 @@ plt.xlabel('Time', size = 20)
 plt.ylabel('Concentration', size = 20)
 plt.xticks(size = 15)
 plt.yticks(size = 15)
-lines = plt.plot(t, results)
-plt.legend(lines[:14], names, prop = {'size': 12}, loc = 'upper right', frameon=True, ncol=2)
+lines = plt.plot(t, result_w)
+plt.legend(lines[:14], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
 plt.show()
 
 
+
+plt.title('Cell model with 1', size = 20)
+plt.xlabel('Time', size = 20)
+plt.ylabel('Concentration', size = 20)
+plt.xticks(size = 15)
+plt.yticks(size = 15)
+lines = plt.plot(t, results)
+plt.legend(lines[:14], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
+plt.show()
+
+
+plt.title('Cell model with parameters from R-Script', size = 20)
+plt.xlabel('Time', size = 20)
+plt.ylabel('Concentration', size = 20)
+plt.xticks(size = 15)
+plt.yticks(size = 15)
+lines = plt.plot(t, result_r)
+plt.legend(lines[:14], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
+plt.show()
+
+'''
 x = [10.01, 9.01, 8.01, 7.01, 6.01, 5.01, 4.01, 3.01, 2.01, 1.01, 11.01, 12.01, 13.01, 14.01]
 y = [[4.38, 4.38, 4.38],426.87, [4.15, 4.15], 930, 948.93]
 
@@ -328,6 +351,6 @@ y = [[4.38, 4.38, 4.38],426.87, [4.15, 4.15], 930, 948.93]
 plt.boxplot(x,INPUT_VALUES)
 plt.show()
 
-
+'''
 
 
