@@ -256,8 +256,8 @@ def changeValues(time, i, par):
     et = i[3]
     q = i[5]
     em = i[4]
-    #r = par['M'] / par['nr']
-    r = i[2]
+    r = par['M'] / par['nr']
+    #r = i[2]
     mt = i[6]
     mm = i[7]
     mr = i[8]
@@ -273,8 +273,8 @@ def changeValues(time, i, par):
 
 
     omegaResult = omegax(a, par["wx"], par["thetax"])
-    lamdaResult = lamda(a, par, cx)
-    # lamdaResult = par['l']
+    #lamdaResult = lamda(a, par, cx)
+    lamdaResult = par['l']
 
     detResult = det_dt(a, ct, et, par, lamdaResult)
     demResult = det_dt(a, cm, em, par, lamdaResult)
@@ -368,8 +368,8 @@ plt.show()
 
 
 
-changeValuesProbe = changeValues(np.linspace(0, 100, 1000),np.zeros(14),PAR)
-timeCourseProbe = timeCourse(np.linspace(0, 10, 10),np.zeros(14))
+changeValuesProbe = changeValues(np.linspace(0, 100, 1000),np.zeros(16),PAR)
+timeCourseProbe = timeCourse(np.linspace(0, 10, 10),np.zeros(16))
 
 print(changeValuesProbe)
 print(timeCourseProbe)
