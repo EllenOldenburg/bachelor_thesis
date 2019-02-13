@@ -35,6 +35,8 @@ Constants
 """
 
 PAR = { 's': 10 ** 4,  # externer Nährstoff
+        'kin': 0, # substrate supply rate
+        'dn': 0,  # 1/min, culture dilution rate
         'dm': 0.1,  # mRNA-Abbaurate
         'ns': 0.5,  # Nährstoffeffizienz
         'nr': 7459,  # Ribosomenlänge
@@ -91,11 +93,11 @@ PAR = { 's': 10 ** 4,  # externer Nährstoff
 
 
 
-#               si,    a,    r,    et,   em,  q,     mt,   mm,   mr,   mq,   ct,   cm,   cr,   cq,
-INPUT_VALUES = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 10 ** 4]
-INPUT_VALUES_r = [0, 0,10**(-3), 10**(-3), 10**(-3), 10**(-3), 0, 0, 0, 0, 0, 0, 0, 0, 10 ** 4]
-#INPUT_VALUES_ = [31096.192, 43297.502, 0.0414, 471.364, 471.364, 471.364, 49.333, 49.333, 8514.558, 8811.960, 0, 0, 0, 0, 10 ** 4] #ribosome-bound mRNA sequestered by chloramphenicol
-INPUT_VALUES_w = [31096.192, 43297.502, 0.0414, 471.364, 471.364, 471.364, 49.333, 49.333, 8514.558, 8811.960, 0, 357.898, 348.675, 0, 10 ** 4] # ribosome-bound mRNA
+#               si,    a,    r,    et,   em,  q,     mt,   mm,   mr,   mq,   ct,   cm,   cr,   cq, s, N
+INPUT_VALUES = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+INPUT_VALUES_r = [0, 0,10**(-3), 10**(-3), 10**(-3), 10**(-3), 0, 0, 0, 0, 0, 0, 0, 0, 10 ** 4, 0.001]
+#INPUT_VALUES_ = [31096.192, 43297.502, 0.0414, 471.364, 471.364, 471.364, 49.333, 49.333, 8514.558, 8811.960, 0, 0, 0, 0, 10 ** 4, 0.001] #ribosome-bound mRNA sequestered by chloramphenicol
+INPUT_VALUES_w = [31096.192, 43297.502, 0.0414, 471.364, 471.364, 471.364, 49.333, 49.333, 8514.558, 8811.960, 0, 357.898, 348.675, 0, 10 ** 4, 0.001] # ribosome-bound mRNA
 
 
 """
@@ -147,6 +149,7 @@ def omegaq(a, par, q):
     return par['wq'] * (a / (par['thetanr'] + a)) * I(q, par)
 
 # Die Wachstumsrate λ ist entscheidend, um die zellulären Prozesse mit Wachstum zu verbinden, da alle intrazellulären Spezies durch Umverteilung des Zellinhalts zwischen Mutter- und Tochterzellen verdünnt werden
+#nur im steady state
 def lamda(a, par, cValues):
     return (gamma(a, par) / par['M']) * sum(cValues)
 
@@ -230,6 +233,14 @@ def dq_dt(a, cq, q, par, cValues):
     return vx(a, cq, par) - lamda(a, cValues, par) * q
 
 
+
+def dn_dt(lamdaResult, N, par):
+    return lamdaResult * N - par['dn'] * N
+
+def ds_dt(par, et, s, N):
+    return par['kin'] - vimp(et, s, par) * N - par['dn'] * s
+
+
 """
 
 Change INPUT_VALUES
@@ -240,14 +251,13 @@ Change INPUT_VALUES
 
 
 def changeValues(time, i, par):
-    s = i[14]
     si = i[0]
     a = i[1]
     et = i[3]
     q = i[5]
     em = i[4]
     #r = par['M'] / par['nr']
-    #r = i[2]
+    r = i[2]
     mt = i[6]
     mm = i[7]
     mr = i[8]
@@ -256,8 +266,10 @@ def changeValues(time, i, par):
     cm = i[11]
     cr = i[12]
     cq = i[13]
+    s = i[14]
+    N = i[15]
     cx = [ct, cm, cr, cq]
-    r = nr_r(cx, et, q, em, par)
+    #r = nr_r(cx, et, q, em, par)
 
 
     omegaResult = omegax(a, par["wx"], par["thetax"])
@@ -279,7 +291,8 @@ def changeValues(time, i, par):
     dcmResult = dcxt_dt(a, cm, mm, r,  par, lamdaResult)
     dcrResult = dcxt_dt(a, cr, mr, r,  par, lamdaResult)
     dcqResult = dcxt_dt(a, cq, mq, r,  par, lamdaResult)
-    dsResult = i[14]
+    dsResult = ds_dt(par, et, s, N)
+    dnResult = dn_dt(lamdaResult, N, par)
 
     return [
         dsiResult,
@@ -296,7 +309,8 @@ def changeValues(time, i, par):
         dcrResult,
         dctResult,
         dcqResult,
-        dsResult
+        dsResult,
+        dnResult
         ]
 
 
@@ -305,7 +319,7 @@ def changeValues(time, i, par):
 execute functions
 
 """
-t = np.linspace(0, 5, 10)
+t = np.linspace(0, 100, 10)
 INPUT_VALUESdsi_dt = np.array(changeValues(t, INPUT_VALUES, PAR))
 # INPUT_VALUESdsi_dt = changeValues(INPUT_VALUES, PAR)
 print("INPUT DSI: ", INPUT_VALUESdsi_dt)
@@ -320,7 +334,7 @@ plot
 results = timeCourse(t, INPUT_VALUES)
 result_r = timeCourse(t, INPUT_VALUES_r)
 result_w = timeCourse(t, INPUT_VALUES_w)
-names = ['si', 'a', 'r', 'et', 'em', 'q', 'mt', 'mm', 'mr', 'mq', 'ct', 'cm', 'cr', 'cq','s']
+names = ['si', 'a', 'r', 'et', 'em', 'q', 'mt', 'mm', 'mr', 'mq', 'ct', 'cm', 'cr', 'cq','s', 'N']
 
 plt.title('Cell model with parameters from the paper', size = 20)
 plt.xlabel('Time', size = 20)
@@ -328,7 +342,7 @@ plt.ylabel('Concentration', size = 20)
 plt.xticks(size = 15)
 plt.yticks(size = 15)
 lines = plt.plot(t, result_w)
-plt.legend(lines[:15], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
+plt.legend(lines[:16], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
 plt.show()
 
 
@@ -339,7 +353,7 @@ plt.ylabel('Concentration', size = 20)
 plt.xticks(size = 15)
 plt.yticks(size = 15)
 lines = plt.plot(t, results)
-plt.legend(lines[:15], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
+plt.legend(lines[:16], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
 plt.show()
 
 
@@ -349,7 +363,7 @@ plt.ylabel('Concentration', size = 20)
 plt.xticks(size = 15)
 plt.yticks(size = 15)
 lines = plt.plot(t, result_r)
-plt.legend(lines[:15], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
+plt.legend(lines[:16], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
 plt.show()
 
 
