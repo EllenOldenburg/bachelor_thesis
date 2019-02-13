@@ -92,10 +92,10 @@ PAR = { 's': 10 ** 4,  # externer Nährstoff
 
 
 #               si,    a,    r,    et,   em,  q,     mt,   mm,   mr,   mq,   ct,   cm,   cr,   cq,
-INPUT_VALUES = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-INPUT_VALUES_r = [0, 0,10**(-3), 10**(-3), 10**(-3), 10**(-3), 0, 0, 0, 0, 0, 0, 0, 0]
-#INPUT_VALUES_ = [31096.192, 43297.502, 0.0414, 471.364, 471.364, 471.364, 49.333, 49.333, 8514.558, 8811.960, 0, 0, 0, 0] #ribosome-bound mRNA sequestered by chloramphenicol
-INPUT_VALUES_w = [31096.192, 43297.502, 0.0414, 471.364, 471.364, 471.364, 49.333, 49.333, 8514.558, 8811.960, 0, 357.898, 348.675, 0] # ribosome-bound mRNA
+INPUT_VALUES = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 10 ** 4]
+INPUT_VALUES_r = [0, 0,10**(-3), 10**(-3), 10**(-3), 10**(-3), 0, 0, 0, 0, 0, 0, 0, 0, 10 ** 4]
+#INPUT_VALUES_ = [31096.192, 43297.502, 0.0414, 471.364, 471.364, 471.364, 49.333, 49.333, 8514.558, 8811.960, 0, 0, 0, 0, 10 ** 4] #ribosome-bound mRNA sequestered by chloramphenicol
+INPUT_VALUES_w = [31096.192, 43297.502, 0.0414, 471.364, 471.364, 471.364, 49.333, 49.333, 8514.558, 8811.960, 0, 357.898, 348.675, 0, 10 ** 4] # ribosome-bound mRNA
 
 
 """
@@ -105,8 +105,8 @@ Functions
 """
 
 
-def vimp(et, par):
-    return et * ((par['vt'] * par['s']) / (par['Kt'] + par['s']))
+def vimp(et, s, par):
+    return et * ((par['vt'] * par['s']) / (par['Kt'] + s))
 
 
 def vcat(em, si, par):
@@ -134,8 +134,7 @@ def gamma(a, par):
 def omegax(a, wx, thetaX):
     omegaResult = []
     for i in range(0, 3):
-        # omegaResult.append((wx[i] * a) / (thetaX[i] + a))
-        omegaResult.append(wx[i] *(a / (thetaX[i] + a)))
+        omegaResult.append(wx[i] * (a / (thetaX[i] + a)))
 
     return omegaResult
 
@@ -176,8 +175,8 @@ Differentialgleichungen
 
 # Differentialgleichung für den inneren Nährstoff
 # 1x
-def dsi_dt(si, par, et, em, lamdaResult):
-    return vimp(et, par) - vcat(em, si, par) - lamdaResult * si
+def dsi_dt(si, s, par, et, em, lamdaResult):
+    return vimp(et, s, par) - vcat(em, si, par) - lamdaResult * si
 
 
 # Gleichung für die zellulare Energie
@@ -241,12 +240,13 @@ Change INPUT_VALUES
 
 
 def changeValues(time, i, par):
+    s = i[14]
     si = i[0]
     a = i[1]
     et = i[3]
     q = i[5]
     em = i[4]
-    # r = par['M'] / par['nr']
+    #r = par['M'] / par['nr']
     #r = i[2]
     mt = i[6]
     mm = i[7]
@@ -257,19 +257,17 @@ def changeValues(time, i, par):
     cr = i[12]
     cq = i[13]
     cx = [ct, cm, cr, cq]
-    #nx = par['nx']
-    #wq = par['wq']
     r = nr_r(cx, et, q, em, par)
 
 
     omegaResult = omegax(a, par["wx"], par["thetax"])
     lamdaResult = lamda(a, par, cx)
     # lamdaResult = par['l']
-    
+
     detResult = det_dt(a, ct, et, par, lamdaResult)
     demResult = det_dt(a, cm, em, par, lamdaResult)
     dqResult = det_dt(a, cq, q, par, lamdaResult)
-    dsiResult = dsi_dt(si, par, et, em, lamdaResult)
+    dsiResult = dsi_dt(si, s, par, et, em, lamdaResult)
     daResult = da_dt(a, em, cx, si, par, lamdaResult)
     drResult = dr_dt(a, cx, mt, r, par, lamdaResult, cr)
     # drResult = nr_r(cx, et, q, em, par)
@@ -281,6 +279,7 @@ def changeValues(time, i, par):
     dcmResult = dcxt_dt(a, cm, mm, r,  par, lamdaResult)
     dcrResult = dcxt_dt(a, cr, mr, r,  par, lamdaResult)
     dcqResult = dcxt_dt(a, cq, mq, r,  par, lamdaResult)
+    dsResult = i[14]
 
     return [
         dsiResult,
@@ -296,7 +295,8 @@ def changeValues(time, i, par):
         dcmResult,
         dcrResult,
         dctResult,
-        dcqResult
+        dcqResult,
+        dsResult
         ]
 
 
@@ -320,7 +320,7 @@ plot
 results = timeCourse(t, INPUT_VALUES)
 result_r = timeCourse(t, INPUT_VALUES_r)
 result_w = timeCourse(t, INPUT_VALUES_w)
-names = ['si', 'a', 'r', 'et', 'em', 'q', 'mt', 'mm', 'mr', 'mq', 'ct', 'cm', 'cr', 'cq']
+names = ['si', 'a', 'r', 'et', 'em', 'q', 'mt', 'mm', 'mr', 'mq', 'ct', 'cm', 'cr', 'cq','s']
 
 plt.title('Cell model with parameters from the paper', size = 20)
 plt.xlabel('Time', size = 20)
@@ -328,7 +328,7 @@ plt.ylabel('Concentration', size = 20)
 plt.xticks(size = 15)
 plt.yticks(size = 15)
 lines = plt.plot(t, result_w)
-plt.legend(lines[:14], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
+plt.legend(lines[:15], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
 plt.show()
 
 
@@ -339,7 +339,7 @@ plt.ylabel('Concentration', size = 20)
 plt.xticks(size = 15)
 plt.yticks(size = 15)
 lines = plt.plot(t, results)
-plt.legend(lines[:14], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
+plt.legend(lines[:15], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
 plt.show()
 
 
@@ -349,7 +349,7 @@ plt.ylabel('Concentration', size = 20)
 plt.xticks(size = 15)
 plt.yticks(size = 15)
 lines = plt.plot(t, result_r)
-plt.legend(lines[:14], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
+plt.legend(lines[:15], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
 plt.show()
 
 
