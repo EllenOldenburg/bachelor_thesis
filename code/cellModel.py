@@ -56,8 +56,9 @@ PAR = { 's': 10 ** 4,  # externer Nährstoff
         'ku': 1,  # mRNA-Ribosomen-Nichtbindungsrate
         'M': 10 ** 8,  # total cell mass
         'kcm': 0.00599,  # Chloramphenicol-Bindungsrate
-        'thetax': [4.38, 4.38, 426.87],# 4.38],  #transkriptionswelle #transcriptional energy-thresholds
-        'wx': [4.15, 4.15, 930]#, 948.93]  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
+        'thetax': [4.38, 4.38, 426.87, 4.38],  #transkriptionswelle #transcriptional energy-thresholds
+        'wx': [4.15, 4.15, 930, 948.93]  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
+        'l': 1
 }
 
 
