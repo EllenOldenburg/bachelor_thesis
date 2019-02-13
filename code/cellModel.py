@@ -159,7 +159,11 @@ def lamda(a, par, cValues):
 #def M(cValue, par):  # die Gesamtmasse der Zelle als Gesamtproteinmasse (einschließlich gebundener Ribosomen)
      #return (sum(par['nx'] * x) + par['nr'] * sum(cValue))
   
+def M(cValues, r, et, q, em, par):
+    return par['nr'] * sum(cValues) + par['nr'] * r + par['nx'] * et + par['nx'] * q + par['nx'] * em
 
+def nr_r(cValues, et, q, em, par):
+    return - (par['nr']*sum(cValues) + par['nx'] * et + par['nx'] * q + par['nx'] * em + par['M'])
 
 
 """
