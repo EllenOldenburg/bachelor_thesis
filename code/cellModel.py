@@ -57,7 +57,7 @@ PAR = { 's': 10 ** 4,  # externer Nährstoff
         'M': 10 ** 8,  # total cell mass
         'kcm': 0.00599,  # Chloramphenicol-Bindungsrate
         'thetax': [4.38, 4.38, 426.87, 4.38],  #transkriptionswelle #transcriptional energy-thresholds
-        'wx': [4.15, 4.15, 930, 948.93]  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
+        'wx': [4.15, 4.15, 930, 948.93],  # wt,wm,wr,wq transkriptionsraten #maximal transcription rates
         'l': 1
 }
 
@@ -115,14 +115,14 @@ def vcat(em, si, par):
 
 # leitet die nettorate der Translation eines Proteins x ab
 # 4x
-def vx(a, cx, par, nx):
-    return cx * (gamma(a, par) / nx)
+def vx(a, cx, par):
+    return cx * (gamma(a, par) / par['nx'])
 
-def vr(a, par, nx, cr):
-    return cr * (gamma(a, par) / nx)
+def vr(a, par, cr):
+    return cr * (gamma(a, par) / par['nx'])
 
-def vq(a, cq, par, nx):
-    return cq * (gamma(a, par) / nx)
+def vq(a, cq, par):
+    return cq * (gamma(a, par) / par['nx'])
 
 # γ ist die Geschwindigkeit der Translationsdehnung mit maximaler Rate γ max = k 2 und Schwelle K γ = k 2 / K p für halbmaximale Dehnung.
 def gamma(a, par):
@@ -144,8 +144,8 @@ def I (q, par):
     return 1/(1+((q/par['Kq'])**par['hq']))
 
 
-def omegaq(wq, a, par, q):
-    return wq * (a / (par['thetanr'] + a)) * I(q, par)
+def omegaq(a, par, q):
+    return par['wq'] * (a / (par['thetanr'] + a)) * I(q, par)
 
 # Die Wachstumsrate λ ist entscheidend, um die zellulären Prozesse mit Wachstum zu verbinden, da alle intrazellulären Spezies durch Umverteilung des Zellinhalts zwischen Mutter- und Tochterzellen verdünnt werden
 def lamda(a, par, cValues):
@@ -182,41 +182,41 @@ def dsi_dt(si, par, et, em, lamdaResult):
 
 # Gleichung für die zellulare Energie
 # 1x
-def da_dt(a, em, cx, si, nx, par, lamdaResult):
+def da_dt(a, em, cx, si, par, lamdaResult):
     sum_all_protein_in_cell = []
     for i in range(0, 4):
-        sum_all_protein_in_cell.append(nx * vx(a, cx[i], par, nx))
+        sum_all_protein_in_cell.append(par['nx'] * vx(a, cx[i], par))
     return par['ns'] * vcat(em, si, par) - sum(sum_all_protein_in_cell) - (lamdaResult * a)
 
 
 # Gleichung für freie Ribosomen  für vr und cr
 # 1x
-def dr_dt(a, cx, mx, r, par, lamdaResult, nx, cr):
+def dr_dt(a, cx, mx, r, par, lamdaResult, cr):
     sum_proteins_ribosomes = []
     for i in range(0, 4):
-        sum_proteins_ribosomes.append(vx(a, cx[i], par, nx) - par['kb'] * r * mx + par['ku'] * cx[i])
-    return vr(a, par, nx, cr) - lamdaResult * r + sum(sum_proteins_ribosomes)
+        sum_proteins_ribosomes.append(vx(a, cx[i], par) - par['kb'] * r * mx + par['ku'] * cx[i])
+    return vr(a, par, cr) - lamdaResult * r + sum(sum_proteins_ribosomes)
 
 
 # intrazelluläre Ribosomen Sei r die Anzahl der freien Ribosomen. Bezeichne k b und k u die Bindungs- und Unbindungsraten eines Ribosoms an mRNA (für alle mRNAs als identisch angenommen) und lasse die mRNA für ein Protein x dann m x sein
 # 4x
-def dmx_dt(a, cx, mx, r, par, lamdaResult, wx, thetaX, nx, omegaResult):
-    return omegaResult - (lamdaResult + par['dm']) * mx + vx(a, cx, par, nx) - par['kb'] * r * mx + par['ku'] * cx
+def dmx_dt(a, cx, mx, r, par, lamdaResult, omegaResult):
+    return omegaResult - (lamdaResult + par['dm']) * mx + vx(a, cx, par) - par['kb'] * r * mx + par['ku'] * cx
 
-def dmq_dt(a, cx, mq, r, par, lamdaResult, wq, nx, q, cq):
-    return omegaq(wq, a, par, q) - (lamdaResult + par['dm']) * mq + vq(a, cq, par, nx) - par['kb'] * r * mq + par['ku'] * cq
+def dmq_dt(a, mq, r, par, lamdaResult, q, cq):
+    return omegaq(a, par, q) - (lamdaResult + par['dm']) * mq + vq(a, cq, par) - par['kb'] * r * mq + par['ku'] * cq
 
 
 # Mit cx wird der Komplex zwischen einem Ribosom bezeichnet und die mRNA für Protein x
 # 4x
-def dcxt_dt(a, cx, mx, r, par, lamdaResult, nx):
-    return (-lamdaResult * cx) + par['kb'] * r * mx - par['ku'] * cx - vx(a, cx, par, nx)
+def dcxt_dt(a, cx, mx, r, par, lamdaResult):
+    return (-lamdaResult * cx) + par['kb'] * r * mx - par['ku'] * cx - vx(a, cx, par)
 
 
 # Transporterenzyme für vt und ct
 # 1x
-def det_dt(a, ct, et, par, cValues, nx):
-    return vx(a, ct, par, nx) - lamda(a, par, cValues) * et
+def det_dt(a, ct, et, par, lamdaResult):
+    return vx(a, ct, par) - lamdaResult * et
 
 
 # Enzym,das si in a umwandelt (metabolische Enzyme)
@@ -246,7 +246,8 @@ def changeValues(time, i, par):
     et = i[3]
     q = i[5]
     em = i[4]
-    r = i[2]
+    # r = par['M'] / par['nr']
+    #r = i[2]
     mt = i[6]
     mm = i[7]
     mr = i[8]
@@ -256,27 +257,29 @@ def changeValues(time, i, par):
     cr = i[12]
     cq = i[13]
     cx = [ct, cm, cr, cq]
-    nx = par['nx']
-    wq = par['wq']
+    #nx = par['nx']
+    #wq = par['wq']
+    r = nr_r(cx, et, q, em, par)
 
 
     omegaResult = omegax(a, par["wx"], par["thetax"])
-
     lamdaResult = lamda(a, par, cx)
-    detResult = det_dt(a, ct, et, par, cx, nx)
-    demResult = det_dt(a, cm, em, par, cx, nx)
-    dqResult = det_dt(a, cq, q, par, cx, nx)
+
+    detResult = det_dt(a, ct, et, par, lamdaResult)
+    demResult = det_dt(a, cm, em, par, lamdaResult)
+    dqResult = det_dt(a, cq, q, par, lamdaResult)
     dsiResult = dsi_dt(si, par, et, em, lamdaResult)
-    daResult = da_dt(a, em, cx, si, nx, par, lamdaResult)
-    drResult = dr_dt(a, cx, mt, r, par, lamdaResult, nx, cr)
-    dmtResult = dmx_dt(a, ct, mt, r, par, lamdaResult, par['wx'][0], par['thetax'][0], nx, omegaResult[0])
-    dmmResult = dmx_dt(a, cm, mm, r, par, lamdaResult, par['wx'][1], par['thetax'][1], nx, omegaResult[1])
-    dmrResult = dmx_dt(a, cr, mr, r, par, lamdaResult, par['wx'][2], par['thetax'][2], nx, omegaResult[2])
-    dmqResult = dmq_dt(a, cx, mq, r, par, lamdaResult, wq, nx, q, cq)
-    dctResult = dcxt_dt(a, ct, mt, r,  par, lamdaResult, nx)
-    dcmResult = dcxt_dt(a, cm, mm, r,  par, lamdaResult, nx)
-    dcrResult = dcxt_dt(a, cr, mr, r,  par, lamdaResult, nx)
-    dcqResult = dcxt_dt(a, cq, mq, r,  par, lamdaResult, nx)
+    daResult = da_dt(a, em, cx, si, par, lamdaResult)
+    drResult = dr_dt(a, cx, mt, r, par, lamdaResult, cr)
+    # drResult = nr_r(cx, et, q, em, par)
+    dmtResult = dmx_dt(a, ct, mt, r, par, lamdaResult, omegaResult[0])
+    dmmResult = dmx_dt(a, cm, mm, r, par, lamdaResult, omegaResult[1])
+    dmrResult = dmx_dt(a, cr, mr, r, par, lamdaResult, omegaResult[2])
+    dmqResult = dmq_dt(a, mq, r, par, lamdaResult, q, cq)
+    dctResult = dcxt_dt(a, ct, mt, r,  par, lamdaResult)
+    dcmResult = dcxt_dt(a, cm, mm, r,  par, lamdaResult)
+    dcrResult = dcxt_dt(a, cr, mr, r,  par, lamdaResult)
+    dcqResult = dcxt_dt(a, cq, mq, r,  par, lamdaResult)
 
     return [
         dsiResult,
@@ -301,7 +304,7 @@ def changeValues(time, i, par):
 execute functions
 
 """
-t = np.linspace(0, 30, 100)
+t = np.linspace(0, 5, 10)
 INPUT_VALUESdsi_dt = np.array(changeValues(t, INPUT_VALUES, PAR))
 # INPUT_VALUESdsi_dt = changeValues(INPUT_VALUES, PAR)
 print("INPUT DSI: ", INPUT_VALUESdsi_dt)
@@ -347,6 +350,20 @@ plt.yticks(size = 15)
 lines = plt.plot(t, result_r)
 plt.legend(lines[:14], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
 plt.show()
+
+
+
+changeValuesProbe = changeValues(np.linspace(0, 100, 1000),np.zeros(14),PAR)
+timeCourseProbe = timeCourse(np.linspace(0, 10, 10),np.zeros(14))
+
+print(changeValuesProbe)
+print(timeCourseProbe)
+
+
+
+
+
+
 
 '''
 x = [10.01, 9.01, 8.01, 7.01, 6.01, 5.01, 4.01, 3.01, 2.01, 1.01, 11.01, 12.01, 13.01, 14.01]
