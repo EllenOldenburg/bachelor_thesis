@@ -34,7 +34,7 @@ Constants
 
 """
 
-PAR = { 's': 10 ** 4,  # externer Nährstoff
+PAR = { #'s': 10 ** 4,  # externer Nährstoff
         'kin': 0, # substrate supply rate
         'dn': 0,  # 1/min, culture dilution rate
         'dm': 0.1,  # mRNA-Abbaurate
@@ -108,7 +108,7 @@ Functions
 
 
 def vimp(et, s, par):
-    return et * ((par['vt'] * par['s']) / (par['Kt'] + s))
+    return et * ((par['vt'] * s) / (par['Kt'] + s))
 
 
 def vcat(em, si, par):
@@ -256,7 +256,7 @@ def changeValues(time, i, par):
     et = i[3]
     q = i[5]
     em = i[4]
-    r = par['M'] / par['nr']
+    #r = par['M'] / par['nr']
     #r = i[2]
     mt = i[6]
     mm = i[7]
@@ -269,12 +269,12 @@ def changeValues(time, i, par):
     s = i[14]
     N = i[15]
     cx = [ct, cm, cr, cq]
-    #r = nr_r(cx, et, q, em, par)
+    r = nr_r(cx, et, q, em, par)
 
 
     omegaResult = omegax(a, par["wx"], par["thetax"])
-    #lamdaResult = lamda(a, par, cx)
-    lamdaResult = par['l']
+    lamdaResult = lamda(a, par, cx)
+    #lamdaResult = par['l']
 
     detResult = det_dt(a, ct, et, par, lamdaResult)
     demResult = det_dt(a, cm, em, par, lamdaResult)
