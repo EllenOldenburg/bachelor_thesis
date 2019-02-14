@@ -319,7 +319,7 @@ def changeValues(time, i, par):
 execute functions
 
 """
-t = np.linspace(0, 100, 10)
+t = np.linspace(0, 5, 10)
 INPUT_VALUESdsi_dt = np.array(changeValues(t, INPUT_VALUES, PAR))
 # INPUT_VALUESdsi_dt = changeValues(INPUT_VALUES, PAR)
 print("INPUT DSI: ", INPUT_VALUESdsi_dt)
