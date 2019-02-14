@@ -273,8 +273,8 @@ def changeValues(time, i, par):
 
 
     omegaResult = omegax(a, par["wx"], par["thetax"])
-    lamdaResult = lamda(a, par, cx)
-    #lamdaResult = par['l']
+    #lamdaResult = lamda(a, par, cx)
+    lamdaResult = par['l']
 
     detResult = det_dt(a, ct, et, par, lamdaResult)
     demResult = det_dt(a, cm, em, par, lamdaResult)
