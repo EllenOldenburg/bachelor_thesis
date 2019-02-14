@@ -247,6 +247,12 @@ Change INPUT_VALUES
 
 """
 
+"""
+
+Change INPUT_VALUES
+
+"""
+
 
 
 
@@ -256,7 +262,7 @@ def changeValues(time, i, par):
     et = i[3]
     q = i[5]
     em = i[4]
-    #r = par['M'] / par['nr']
+    r = par['M'] / par['nr']
     #r = i[2]
     mt = i[6]
     mm = i[7]
@@ -269,7 +275,7 @@ def changeValues(time, i, par):
     s = i[14]
     N = i[15]
     cx = [ct, cm, cr, cq]
-    r = nr_r(cx, et, q, em, par)
+    #r = nr_r(cx, et, q, em, par)
 
 
     omegaResult = omegax(a, par["wx"], par["thetax"])
@@ -282,7 +288,6 @@ def changeValues(time, i, par):
     dsiResult = dsi_dt(si, s, par, et, em, lamdaResult)
     daResult = da_dt(a, em, cx, si, par, lamdaResult)
     drResult = dr_dt(a, cx, mt, r, par, lamdaResult, cr)
-    # drResult = nr_r(cx, et, q, em, par)
     dmtResult = dmx_dt(a, ct, mt, r, par, lamdaResult, omegaResult[0])
     dmmResult = dmx_dt(a, cm, mm, r, par, lamdaResult, omegaResult[1])
     dmrResult = dmx_dt(a, cr, mr, r, par, lamdaResult, omegaResult[2])
@@ -319,7 +324,7 @@ def changeValues(time, i, par):
 execute functions
 
 """
-t = np.linspace(0, 5, 10)
+t = np.linspace(0, 100, 10)
 INPUT_VALUESdsi_dt = np.array(changeValues(t, INPUT_VALUES, PAR))
 # INPUT_VALUESdsi_dt = changeValues(INPUT_VALUES, PAR)
 print("INPUT DSI: ", INPUT_VALUESdsi_dt)
@@ -346,7 +351,7 @@ plt.legend(lines[:16], names, prop = {'size': 12}, loc = 'upper left', frameon=T
 plt.show()
 
 
-
+'''
 plt.title('Cell model with 1', size = 20)
 plt.xlabel('Time', size = 20)
 plt.ylabel('Concentration', size = 20)
@@ -365,8 +370,7 @@ plt.yticks(size = 15)
 lines = plt.plot(t, result_r)
 plt.legend(lines[:16], names, prop = {'size': 12}, loc = 'upper left', frameon=True, ncol=2)
 plt.show()
-
-
+'''
 
 changeValuesProbe = changeValues(np.linspace(0, 100, 1000),np.zeros(16),PAR)
 timeCourseProbe = timeCourse(np.linspace(0, 10, 10),np.zeros(16))
