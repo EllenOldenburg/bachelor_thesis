@@ -1,0 +1,47 @@
+import modelbase
+import modelbase.ratelaws as rl
+from weisse import WeisseBaseModel, defaultParameters
+
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.optimize as spo
+
+cl = ['si','a','mr','mt','mm','mq', 'cr','ct','cm','cq','pr','pt','pm','pq']
+
+m = WeisseBaseModel()
+s = modelbase.Simulator(m)
+#                        ['si',       'a',     'mr',     'mt',   'mm',    'mq',    'cr', 'ct', 'cm', 'cq', 'pr',   'pt',    'pm',     'pq']
+weise_values = np.array(
+    [31096.192, 43297.502, 8514.558, 49.333, 49.333, 8811.960, 348.675, 0, 357.898, 0, 0.0414, 471.364, 471.364,
+     471.364])
+s.timeCourse(np.linspace(0, 3000, 100), weise_values);
+
+
+def Opt(p0):
+    m = WeisseBaseModel()
+    s = modelbase.Simulator(m)
+    m.par.Kgamma, m.par.wr, m.par.wt, m.par.wm, m.par.wq, m.par.thetar, m.par.thetat, m.par.thetam, m.par.thetaq, m.par.Kq = p0
+
+    #                        ['si',       'a',     'mr',     'mt',   'mm',    'mq',    'cr', 'ct', 'cm', 'cq', 'pr',   'pt',    'pm',     'pq']
+    weise_values = np.array(
+        [31096.192, 43297.502, 8514.558, 49.333, 49.333, 8811.960, 348.675, 0, 357.898, 0, 0.0414, 471.364, 471.364,
+         471.364])
+    s.timeCourse(np.linspace(0, 3000, 100), weise_values);
+    lambdanach = s.getY()[:, 16][-1]
+    lamda = 100 - lambdanach
+    print(lamda)
+
+    return (lamda)
+
+
+init_guess = [7,930,4.14,4.14,948.93,
+              426.87,4.38,4.38,4.38,152219]
+
+bounds = ((0.1,100),(0.1,1000),(0.1,100),
+          (0.1,100),(1,10000),(0.1,1000),(0.1,100),(0.1,100),
+          (0.1,100),(0.1,1000000))
+
+fit = spo.minimize(Opt, init_guess, bounds = bounds)
+
+print(fit)
+

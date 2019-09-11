@@ -34,9 +34,8 @@ defaultParameters = { 's': 1e4,  # external nutrient [ molecs ]
                       'kb': 1,  # mRNA-ribosome binding rate
                       'ku': 1,  # mRNA-ribosome unbinding rate
                       'M': 1e8,  # total cell mass
-                      'kcm': 0.00599,  # chloramphenicol-binding rate,
+                      'kcm': 0.00599  # chloramphenicol-binding rate
 }
-
 
 
 indexx = ['r','t','m','q']
